@@ -1,0 +1,11 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{2}{section.1}%
+\contentsline {section}{\numberline {2}Instalación de Git}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Instalación en Linux - Compatibilidad con Debian}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Instalación en Linux - Fedora (yum/dnf)}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Instalación en Windows}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Instalación en MacOS}{3}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Creación de la cuenta en Github}{4}{section.3}%
+\contentsline {section}{\numberline {4}Usar Git}{5}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Git por línea de comandos}{5}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Git con Interfaz en los IDE}{6}{subsection.4.2}%
