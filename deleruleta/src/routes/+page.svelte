@@ -1,6 +1,8 @@
 <script>
     import '../app.css';
+    import Panel from '../Panel.svelte';
 </script>
 
-<h1 class="text-dele-primary text-center text-2xl">La deleruleta de la suerte</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<h1 class="text-dele-primary text-center text-4xl">La deleruleta de la suerte</h1>
+
+<Panel />
