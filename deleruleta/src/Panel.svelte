@@ -34,7 +34,7 @@ function iniciate_panel() {
 // Carga la frase
 function load_phrase(lineas: Array) {
     for (let linea in lineas) {
-        let length_espacios = 16 - lineas[linea].length;
+        let length_espacios = num_cols - lineas[linea].length;
 
         let left_spaces = (length_espacios + (length_espacios % 2)) / 2;
         let right_spaces = (length_espacios - (length_espacios % 2)) / 2;
@@ -62,6 +62,9 @@ function load_phrase(lineas: Array) {
             else {
                 if (lineas[fila].substring(col, col+1) == " ") {
                     panel[fila.toString() + "-" + col.toString()] = {type: "Espacio", color:"bg-[#0016dd]", clickable: false, visible: true, border: "border-2 border-black", value: " "};
+                }
+                else if (simbolos_especiales.includes(lineas[fila].substring(col, col + 1))) {
+                    panel[fila.toString() + "-" + col.toString()] = {type: "Letra desvelada", color:"bg-[#FFFFFF]", clickable: false, visible: true, border: "border-2 border-black", value: lineas[fila].substring(col, col+1)};
                 }
                 else {
                     panel[fila.toString() + "-" + col.toString()] = {type: "Letra Oculta", color:"bg-[#FFFFFF]", clickable: false, visible: false, border: "border-2 border-black", value: lineas[fila].substring(col, col+1)};
@@ -124,7 +127,8 @@ let unsuccess_loading_phrase: boolean = false;
 let error_loading_phrase: String;
 let phrase_checked: boolean = false;
 
-const dictionare = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ ";
+const dictionare = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ ,¿?¡!";
+const simbolos_especiales = ",¿?¡!"
 
 function check_dictionare(frase: String) {
     for (var letra of frase) {
