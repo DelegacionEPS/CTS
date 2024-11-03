@@ -74,7 +74,7 @@ function load_phrase(lineas: Array, pista: String) {
                     panel[fila.toString() + "-" + col.toString()] = {type: "Letra desvelada", color:"bg-[#FFFFFF]", clickable: false, visible: true, border: "border-2 border-black", value: lineas[fila].substring(col, col+1)};
                 }
                 else {
-                    panel[fila.toString() + "-" + col.toString()] = {type: "Letra Oculta", color:"bg-[#FFFFFF]", clickable: false, visible: false, border: "border-2 border-black", value: lineas[fila].substring(col, col+1)};
+                    panel[fila.toString() + "-" + col.toString()] = {type: "Espacio", color:"bg-[#0016dd]", clickable: false, visible: false, border: "border-2 border-black", value: undefined};
                 }
             }
         }
@@ -103,21 +103,62 @@ function check_words(frase: String, pista: String) {
         }
     }
     
-    let current_linea = 0;
-    let current_frase = "";
-    while (palabras.length > 0 && current_linea < num_filas) {
-        if (palabras[0].length <= lineas_longitud[current_linea]) {
-            current_frase = current_frase + palabras[0] + " ";
-            lineas_longitud[current_linea] -= (palabras[0].length + 1);
-            palabras.splice(0, 1);
-            if (palabras.length == 0) {
-                lineas.push(current_frase);
+    // Carga la frase
+    function load_phrase(lineas: Array<string>) {
+        for (let linea in lineas) {
+            let length_espacios = num_cols - lineas[linea].length;
+    
+            let left_spaces = (length_espacios + (length_espacios % 2)) / 2;
+            let right_spaces = (length_espacios - (length_espacios % 2)) / 2;
+            
+            let new_linea = "";
+            for (let i = 0; i < left_spaces; i++) {
+                new_linea += " "
+            }
+    
+            new_linea += lineas[linea];
+            
+            for (let i = 0; i < right_spaces; i++) {
+                new_linea += " "
+            }
+            
+            lineas[linea] = new_linea;
+        }
+    
+        for (let fila = 0; fila < lineas.length; fila++) {
+            for (let col = 0; col < num_cols; col++) {
+                let celda: Celda;
+                if ((fila== 0 || fila== num_filas - 1) && (col == 0 || col == num_cols -1)) {
+                    panel[fila.toString() + "-" + col.toString()] = {type: "Esquina", color:"bg-[#FFFFFF]", clickable: false, visible: false, border: "border-none", value: undefined};
+                }
+                else {
+                    if (lineas[fila].substring(col, col+1) == " ") {
+                    panel[fila.toString() + "-" + col.toString()] = {type: "Espacio", color:"bg-[#0016dd]", clickable: false, visible: true, border: "border-2 border-black", value: " "};
+                    }
+                    else if (simbolos_especiales.includes(lineas[fila].substring(col, col + 1))) {
+                        panel[fila.toString() + "-" + col.toString()] = {type: "Letra desvelada", color:"bg-[#FFFFFF]", clickable: false, visible: true, border: "border-2 border-black", value: lineas[fila].substring(col, col+1)};
+                    }
+                    else {
+                        panel[fila.toString() + "-" + col.toString()] = {type: "Letra Oculta", color:"bg-[#FFFFFF]", clickable: false, visible: false, border: "border-2 border-black", value: lineas[fila].substring(col, col+1)};
+                    }
+                }
             }
         }
-        else {
-            lineas.push(current_frase);
-            current_linea += 1;
-            current_frase = "";
+    }
+    
+    // Checkea las palabras
+    function check_words(frase: string) {
+        let palabras = frase.split(" ");
+        let lineas = [];
+        let lineas_longitud: number[] = [];
+    
+        for (let i = 0; i < num_filas; i++) {
+            if (i == 0 || i == (num_filas - 1)) {
+                lineas_longitud.push(num_cols - 2);
+            }
+            else {
+                lineas_longitud.push(num_cols)
+            }
         }
     }
     
@@ -150,6 +191,15 @@ function check_dictionare(frase: String) {
             console.log(letra);
             return false;
         }
+        
+        for (let linea in lineas) {
+            lineas[linea] = lineas[linea].trim();
+        }
+        if (lineas.length <= (num_filas + (num_filas % 2))/2) {
+            lineas.unshift("");
+        }
+        load_phrase(lineas);
+        return true;
     }
     return true;
 }
@@ -160,23 +210,36 @@ function check_phrase(input: HTMLInputElement, pista: HTMLInputElement) {
     let p = pista.value;
     frase = frase.trim().toUpperCase();
     
-    if (frase.length > num_chars){
-        error_loading_phrase = "La frase ha de tener menos de " + num_chars.toString() + " caracteres."
-        unsuccess_loading_phrase = true;
-        setTimeout(() => {
-			unsuccess_loading_phrase = false;	
-		}, 3000);
+    // Checkear que la frase es válida
+    let success_loading_phrase:boolean = false;
+    let unsuccess_loading_phrase: boolean = false;
+    let error_loading_phrase: string;
+    let phrase_checked: boolean = false;
+    
+    const dictionare = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ ,?¿!¡";
+    const simbolos_especiales = ",¿?¡!"
+    
+    function check_dictionare(frase: string) {
+        for (var letra of frase) {
+            if (!dictionare.includes(letra)) {
+                console.log("Letra inválida: ", letra);
+                return false;
+            }
+        }
+        return true;
     }
-    else if (frase.length == 0) {
-        error_loading_phrase = "Tienes que escribir algo."
-        unsuccess_loading_phrase = true;
-        setTimeout(() => {
-			unsuccess_loading_phrase = false;	
-		}, 3000);
-    }
-    else {
-        if (!check_dictionare(frase)) {
-            error_loading_phrase = "La frase contiene caracteres especiales."
+    
+    function check_phrase(input: HTMLElement | null) {
+        if (input == null) {
+            return;
+        }
+        iniciate_panel();
+        let inputHTML = input as HTMLInputElement;
+        let frase = inputHTML.value;
+        frase = frase.trim().toUpperCase();
+        
+        if (frase.length > num_chars){
+            error_loading_phrase = "La frase ha de tener menos de " + num_chars.toString() + " caracteres."
             unsuccess_loading_phrase = true;
             setTimeout(() => {
                 unsuccess_loading_phrase = false;	
@@ -187,15 +250,32 @@ function check_phrase(input: HTMLInputElement, pista: HTMLInputElement) {
             success_loading_phrase = true;
             phrase_checked = true;
             setTimeout(() => {
-                success_loading_phrase = false;	
+                unsuccess_loading_phrase = false;	
             }, 3000);
         }
         else {
-            error_loading_phrase = "La frase no cabe en el panel."
-            unsuccess_loading_phrase = true;
-            setTimeout(() => {
-                unsuccess_loading_phrase = false;	
-            }, 3000);
+            if (!check_dictionare(frase)) {
+                error_loading_phrase = "La frase contiene caracteres especiales."
+                unsuccess_loading_phrase = true;
+                setTimeout(() => {
+                    unsuccess_loading_phrase = false;	
+                }, 3000);
+            }
+            else if (check_words(frase)) {
+                inputHTML.value = "";
+                success_loading_phrase = true;
+                phrase_checked = true;
+                setTimeout(() => {
+                    success_loading_phrase = false;	
+                }, 3000);
+            }
+            else {
+                error_loading_phrase = "La frase no cabe en el panel."
+                unsuccess_loading_phrase = true;
+                setTimeout(() => {
+                    unsuccess_loading_phrase = false;	
+                }, 3000);
+            }
         }
     }
 }
@@ -260,6 +340,38 @@ function check_letter(input: HTMLInputElement) {
             setTimeout(() => {
                 unsuccess_letter = false;	
             }, 3000);
+        }
+        else if (letras_dichas.includes(letra)) {
+            error_letter = "La letra ya está dicha."
+            unsuccess_letter = true;
+            setTimeout(() => {
+                unsuccess_letter = false;	
+            }, 3000);
+        }
+        else {
+            if (!check_letter_dictionare(letra)){
+                error_letter = "Eso no es una letra."
+                unsuccess_letter = true;
+                setTimeout(() => {
+                    unsuccess_letter = false;	
+                }, 3000);
+            }
+            else if (check_letter_in_panel(letra)) {
+                inputHTML.value = "";
+                letras_dichas += letra;
+                success_letter = true;
+                setTimeout(() => {
+                    success_letter = false;	
+                }, 3000);
+            }
+            else {
+                error_letter = "La letra no está en el panel :(";
+                inputHTML.value = "";
+                unsuccess_letter= true;
+                setTimeout(() => {
+                    unsuccess_letter = false;	
+                }, 3000);
+            }
         }
     }
     say_letter = false;
@@ -367,8 +479,38 @@ iniciate_panel();
                             {/if}
                         </div>
                     {/if}
-                {/if}
-            {/each}
+                {/each}
+            </div>
+        {/each}
+    </div>
+    
+    {#if !phrase_checked}
+        <form class="w-1/3 m-auto">
+            <label class="grid grid-cols-1 mt-16">
+                <span class="w-full text-dele-primary text-center text-2xl">Nueva Frase</span>
+                <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="fraseInput" placeholder="Frase..." />
+            </label>
+            <div class="grid grid-cols-1 place-items-center">
+                <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl w-1/2 mt-4 text-xl text-white" on:click={() => check_phrase(document.getElementById("fraseInput"))}>Comprobar</button>
+            </div>
+        </form>
+    {:else}
+        <form class="w-1/3 m-auto">
+            <label class="grid grid-cols-1 mt-16">
+                <span class="w-full text-dele-primary text-center text-2xl">Letra</span>
+                <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="letraInput" placeholder="Letra..." />
+            </label>
+            <div class="grid grid-cols-1 place-items-center">
+                <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl w-1/2 mt-4 text-xl text-white" on:click={() => check_letter(document.getElementById("letraInput"))}>Comprobar</button>
+            </div>
+        </form>
+    {/if}
+    
+    {#if success_loading_phrase}
+        <div class="fixed bottom-0 right-0 m-5">
+            <Card class="bg-green-600 text-white grid-cols-1 text-center px-6 py-2">
+                <p class="p-2">La frase es válida</p>
+            </Card>
         </div>
     {/each}
 </div>
