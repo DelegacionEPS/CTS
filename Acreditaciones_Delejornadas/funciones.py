@@ -15,9 +15,12 @@ def gen_acreditacion(data, f_output):
     elif "colme" in data["centro"].lower():
         data["color"] = "#09725F"
         data["centro"] = "colme"
-    elif "facultad" in data["centro"].lower():
+    elif "humanidades" in data["centro"].lower():
         data["color"] = "#5599DD"
-        data["centro"] = "getafe"
+        data["centro"] = "humanidades"
+    elif "sociales" in data["centro"].lower():
+        data["color"] = "#FFBF1F"
+        data["centro"] = "sociales"
     elif "postgrado" in data["centro"].lower():
         data["color"] = "#FF6D2E"
         data["centro"] = "puerta"
@@ -71,9 +74,6 @@ def gen_acreditacion(data, f_output):
     html = html.replace('src="base/centro.png"', f'src="{ruta_centro_imagen}"')
     html = html.replace('src="base/uc3m.png"', f'src="{ruta_uc3m_imagen}"')
     html = html.replace('src="base/dele.png"', f'src="{ruta_imagen}"')
-    print(ruta_imagen)
-    print(ruta_centro_imagen)
-    print(ruta_uc3m_imagen)
 
     print(f"Generating {file_name}")
     hti.screenshot(html_str=html, save_as=file_name, size=(1411, 886))
