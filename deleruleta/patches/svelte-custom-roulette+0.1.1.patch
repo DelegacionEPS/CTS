@@ -1,0 +1,13 @@
+diff --git a/node_modules/svelte-custom-roulette/src/lib/Wheel.svelte b/node_modules/svelte-custom-roulette/src/lib/Wheel.svelte
+index 1e4fc14..86ddba4 100644
+--- a/node_modules/svelte-custom-roulette/src/lib/Wheel.svelte
++++ b/node_modules/svelte-custom-roulette/src/lib/Wheel.svelte
+@@ -136,7 +136,7 @@
+   <div style="rotate: {spinDeg}turn" class="wheel" />
+   <Pointer {pointerColor} {pointerSize} />
+   <button class="spin-button" on:click={spinWheel} color={pointerTextColor}
+-    >Spin!</button
++    >Gira Ahora!</button
+   >
+ </div>
+ 
