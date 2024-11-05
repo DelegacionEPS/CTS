@@ -7,7 +7,8 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"postinstall": "patch-package"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
@@ -15,6 +16,7 @@
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"autoprefixer": "^10.4.20",
 		"flowbite-svelte-icons": "^2.0.2",
+		"patch-package": "^8.0.0",
 		"postcss": "^8.4.47",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
@@ -23,6 +25,10 @@
 		"vite": "^5.0.3"
 	},
 	"dependencies": {
-		"flowbite-svelte": "^0.47.2"
+		"@types/d3": "^7.4.3",
+		"d3": "^7.9.0",
+		"easing": "^1.2.1",
+		"flowbite-svelte": "^0.47.2",
+		"react-custom-roulette": "^1.4.1"
 	}
 }
