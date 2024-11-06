@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { turno, num_players} from './variablesStore.ts';
+    import { turno, num_players, marcadores_local, marcadores_total, tipo_marcador} from './variablesStore.ts';
 
     export let pointedSegment;
 
@@ -18,7 +18,7 @@
 
     function iniciate_players() {
         for (let id = 0; id < num_players; id ++) {
-            marcadores.push({id: id, color: colors[id], name: "Equipo " + (id + 1).toString(), money: 0, textcolor: textcolors[id]});
+            marcadores.push({id: id, color: colors[id], name: "Equipo " + (id + 1).toString(), textcolor: textcolors[id]});
         }
     }
     iniciate_players();
@@ -30,7 +30,11 @@
         {#each marcadores as marcador}
             <div class="{marcador.color} {marcador.textcolor} h-[15vh] w-[80%] rounded-xl {$turno == marcador.id ? 'mb-10 shadow-2xl' : 'mb-0'}">
                 <p class="w-full text-2xl">{marcador.name}</p>
-                <p class="w-full h-full mt-4 text-2xl">{marcador.money} puntos</p>
+                {#if $tipo_marcador}
+                    <p class="w-full h-full mt-4 text-2xl">{$marcadores_local[marcador.id]} puntos</p>
+                {:else}
+                    <p class="w-full h-full mt-4 text-2xl">Total: {$marcadores_total[marcador.id]} puntos</p>
+                {/if}
             </div>
         {/each}
     </div>

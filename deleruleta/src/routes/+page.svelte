@@ -21,7 +21,7 @@
         ruleta_girada = true;
 
         if (pointedSegment == "Quiebra" || pointedSegment == "Pierde Turno") {
-            panelref.pasarTurno()
+            panelref.pasarTurno(true);
         }
 
         setTimeout(() => {
@@ -30,15 +30,19 @@
         }, 2000)
     }
     
+    function volverRuleta() {
+        ruleta_girada = false;
+        ruleta.update(() => false);
+    }
 </script>
 
 
 <div class="{$ruleta ? 'hidden' : 'block'}">
     <Panel bind:this={panelref} {pointedSegment} />
-    <Marcadores bind:this={marcadoresref} {pointedSegment} />
+    <Marcadores bind:this={marcadoresref} {pointedSegment}/>
 </div>    
 <div class="{!$ruleta ? 'hidden' : 'block'}">    
-    <Ruleta {pointedSegment} {setPointedSegment}/>
+    <Ruleta {pointedSegment} {setPointedSegment} {volverRuleta}/>
 </div>
 
 {#if ruleta_girada}
