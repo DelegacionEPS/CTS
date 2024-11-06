@@ -1,9 +1,11 @@
 <script lang="ts">
     import { Card } from "flowbite-svelte";
     import { CalendarEditOutline, CloseCircleOutline } from 'flowbite-svelte-icons';
-    import { turno, num_players, ruleta} from './variablesStore.ts';
+    import { turno, num_players, ruleta, marcadores_local, update_marcadores_local, update_marcadores_total, update_tipo_marcador} from './variablesStore.ts';
 
     export let pointedSegment;
+
+    let audioElement;
 
     type Celda = {
         type: String,
@@ -24,11 +26,14 @@
     let say_phrase = false;
 
 
-    export function pasarTurno() {
+    export function pasarTurno(quiebra: boolean) {
         main_menu = true;
         say_letter = false;
         buy_vocal = false;
         say_phrase = false;
+        if (quiebra) {
+            update_marcadores_local(0, $turno, 1);
+        }
         turno.update(t => (t + 1) % num_players);
     }
     
@@ -53,6 +58,8 @@
     let frase_cargada: String = "";
     function load_phrase(lineas: Array, pista: String) {
         letras_dichas = "";
+        update_tipo_marcador(true);
+        turno.update(() => Math.floor(Math.random() * 4));
         for (let linea in lineas) {
             let length_espacios = num_cols - lineas[linea].length;
     
@@ -160,7 +167,6 @@
     function check_dictionare(frase: String) {
         for (var letra of frase) {
             if (!dictionare.includes(letra)) {
-                console.log(letra);
                 return false;
             }
         }
@@ -219,8 +225,8 @@
     let error_letter: String;
     let letras_dichas: String = "";
     
+    let count = 0;
     function check_letter_in_panel(letra: string) {
-        let count = 0;
         Object.keys(panel).forEach(key => {
             if (panel[key].value == letra) {
                 panel[key].type = "Letra descubierta";
@@ -234,7 +240,7 @@
         return (count > 0);
     }
     
-    function check_letter(input: HTMLInputElement) {
+    function check_letter(input: HTMLInputElement, vocal: boolean) {
         let letra = input.value.toUpperCase();
         if (letra.length > 1){
             error_letter = "Eso no es una letra."
@@ -253,16 +259,26 @@
         else if (letras_dichas.includes(letra)) {
             error_letter = "La letra ya está dicha."
             unsuccess_letter = true;
-            pasarTurno();
+            pasarTurno(false);
             setTimeout(() => {
                 unsuccess_letter = false;	
             }, 3000);
         }
         else {
+            count = 0;
             if (check_letter_in_panel(letra)) {
                 input.value = "";
                 letras_dichas += letra;
                 success_letter = true;
+                
+                let premio = (parseInt(pointedSegment, 10) * count);
+                if (vocal) {
+                    update_marcadores_local(-10, $turno, 0);
+                }
+                else {
+                    update_marcadores_local(premio, $turno, 0);
+                }
+
                 setTimeout(() => {
                     success_letter = false;	
                 }, 3000);
@@ -271,7 +287,7 @@
                 error_letter = "La letra no está en el panel :(";
                 input.value = "";
                 unsuccess_letter= true;
-                pasarTurno();
+                pasarTurno(false);
                 setTimeout(() => {
                     unsuccess_letter = false;	
                 }, 3000);
@@ -294,7 +310,7 @@
             }, 3000);
         }
         else {
-            check_letter(input);
+            check_letter(input, false);
         }
     }
     
@@ -302,7 +318,14 @@
     const valid_vocales = "AEIOU";
     function check_vocal(input: HTMLInputElement) {
         let letra = input.value.toUpperCase();
-        if (!valid_vocales.includes(letra)) {
+        if ($marcadores_local[$turno] < 10) {
+            error_letter = "Necesitas 10 puntos para comprar una vocal."
+            unsuccess_letter = true;
+            setTimeout(() => {
+                unsuccess_letter = false;	
+            }, 3000);
+        }
+        else if (!valid_vocales.includes(letra)) {
             error_letter = "Eso no es una vocal."
             unsuccess_letter = true;
             setTimeout(() => {
@@ -310,7 +333,7 @@
             }, 3000);
         }
         else {
-            check_letter(input);
+            check_letter(input, true);
         }
     }
     
@@ -342,17 +365,21 @@
     
     function check_resolution(input: HTMLInputElement) {
         let resolucion = input.value.trim().toUpperCase();
-        console.log("1:" + resolucion, "2:" + frase_cargada)
         if (resolucion == frase_cargada) {
+            audioElement.play()
             success_checking_phrase = true;
+            update_marcadores_total($turno, $marcadores_local[$turno]);
+            update_tipo_marcador(false);
             setTimeout(() => {
-                success_checking_phrase = false;	
+                success_checking_phrase = false;
+                audioElement.stop();	
+                audioElement.currentTime = 0;
             }, 3000);
             show_phrase();
         }
         else {
             unsuccess_checking_phrase = true;
-            pasarTurno();
+            pasarTurno(false);
             setTimeout(() => {
                 unsuccess_checking_phrase = false;	
             }, 3000);
@@ -364,7 +391,7 @@
     iniciate_panel();
     </script>
     
-    <div class="grid grid-cols-1 m-auto w-[90vw] mt-4 {$turno == 0 ? 'border-red-500' : $turno == 1 ? 'border-blue-500' : $turno == 2 ? 'border-yellow-500' : 'border-green-500'} border-8">
+    <div class="grid grid-cols-1 m-auto w-[90vw] mt-4 {$turno == 0 ? 'border-[#fc1e1e]' : $turno == 1 ? 'border-[#008dea]' : $turno == 2 ? 'border-[#f8d42d]' : 'border-[#209800ff]'} border-8">
         {#each {length: num_filas} as _, fila}
             <div class="grid grid-cols-16 place-items-center">
                 {#each Object.entries(panel) as [indice, celda], pos}
@@ -417,7 +444,8 @@
                     <label class="grid grid-cols-1 mt-2">
                         <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="letraInput" placeholder="Consonante..." />
                     </label>
-                    <div class="grid grid-cols-1 mt-2 place-items-center">
+                    <div class="grid grid-cols-2     mt-2 place-items-center">
+                        <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {say_letter = false; main_menu = true;}}>Volver</button>
                         <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl text-xl text-white w-5/6" on:click={() => check_consonante(document.getElementById("letraInput"))}>Comprobar</button>
                     </div>
                 </form>
@@ -488,3 +516,8 @@
             </Card>
         </div>
     {/if}
+
+<audio bind:this={audioElement}>
+    <source src="./src/puzzle_solved.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+</audio>

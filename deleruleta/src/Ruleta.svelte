@@ -27,6 +27,8 @@
     let spinDeg = 0; // Grados de rotación total
     let isSpinning = false; // Estado de giro
 
+    let audioElement;
+
     export const reinicioRuleta = () => {
       spinDeg = 0;
       isSpinning = false;
@@ -34,12 +36,17 @@
 
     const spinWheel = () => {
       if (isSpinning) return;
+
+      audioElement.currentTime = 5.2;
+      audioElement.play();
       isSpinning = true;
       const randomSpin = Math.floor(Math.random() * 720) + 2040; // Giro aleatorio entre 360 y 720
       spinDeg += randomSpin;
       
       setTimeout(() => {
           determineSegmentPointed();
+          audioElement.pause();
+          audioElement.currentTime = 5.2;
         }, 3000); // Ajusta el tiempo del giro
 
       setTimeout(() => {
@@ -49,6 +56,7 @@
     
     export let pointedSegment;
     export let setPointedSegment;
+    export let volverRuleta;
     const determineSegmentPointed = () => {
         let angleInDegrees = spinDeg% 360; // Ajustar el ángulo entre 0-360
         const segmentAngle = 360 / items.length; // Ángulo de cada segmento
@@ -59,7 +67,6 @@
 
         for (let i = 0; i < items.length; i++) {
             distance = Math.abs(90 - (angleInDegrees + (segmentAngle / 2)));
-            console.log(distance);
             if (distance < min) {
                 min = distance;
                 indice = i;
@@ -117,12 +124,17 @@
 
 
 <div class="m-auto grid grid-cols-1 place-items-center min-h-screen">
+    <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {volverRuleta()}}>Volver</button>
     <div class="ruleta-container w-auto h-auto">
         <div class="pointer text-dele-primary">▲</div>
         <div on:click={spinWheel} id="ruleta" style="transform: rotate({spinDeg}deg); transition: transform 3s;"></div>
     </div>
 </div>
 
+<audio bind:this={audioElement}>
+    <source src="./src/sonido_ruleta.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+</audio>
 
   <style>
     .ruleta-container {
