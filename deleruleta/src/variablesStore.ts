@@ -2,7 +2,7 @@
 import { writable } from 'svelte/store';
 
 export const num_players = 4;
-export let turno = writable(Math.floor(num_players * Math.random()) % num_players);
+export let turno = writable(0);
 export let ruleta = writable(false);
 export let marcadores_local = writable([0, 0, 0, 0])
 

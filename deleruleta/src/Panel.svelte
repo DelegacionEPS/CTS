@@ -349,6 +349,7 @@
     let unsuccess_checking_phrase = false;
     
     function show_phrase() {
+        document.getElementById("pista").innerHTML = "";
         for (let fila= 0; fila < num_filas;  fila++) {
             for (let col = 0; col < num_cols; col++) {
                 panel[fila + "-" + col].visible = true;
@@ -391,133 +392,133 @@
     iniciate_panel();
     </script>
     
-    <div class="grid grid-cols-1 m-auto w-[90vw] mt-4 {$turno == 0 ? 'border-[#fc1e1e]' : $turno == 1 ? 'border-[#008dea]' : $turno == 2 ? 'border-[#f8d42d]' : 'border-[#209800ff]'} border-8">
-        {#each {length: num_filas} as _, fila}
-            <div class="grid grid-cols-16 place-items-center">
-                {#each Object.entries(panel) as [indice, celda], pos}
-                    {#if indice.substring(0, 1) == fila.toString()}
-                        {#if celda.clickable}
-                            <button class="h-[12.5vh] w-full flex items-center justify-center {celda.color} {celda.border}" style="font-size: 350%" on:click={() => {clicking_cell(indice)}}>
-                                {#if celda.visible}
-                                    {celda.value}
-                                {/if}
-                            </button>
-                        {:else}
-                            <div class="h-[12.5vh] w-full flex items-center justify-center {celda.color} {celda.border}" style="font-size: 350%">
-                                {#if celda.visible}
-                                    {celda.value}
-                                {/if}
-                            </div>
-                        {/if}
+<div class="grid grid-cols-1 m-auto w-[90vw] mt-4 {$turno == 0 ? 'border-[#fc1e1e]' : $turno == 1 ? 'border-[#008dea]' : $turno == 2 ? 'border-[#f8d42d]' : 'border-[#209800ff]'} border-8">
+    {#each {length: num_filas} as _, fila}
+        <div class="grid grid-cols-16 place-items-center">
+            {#each Object.entries(panel) as [indice, celda], pos}
+                {#if indice.substring(0, 1) == fila.toString()}
+                    {#if celda.clickable}
+                        <button class="h-[12.5vh] w-full flex items-center justify-center {celda.color} {celda.border}" style="font-size: 350%" on:click={() => {clicking_cell(indice)}}>
+                            {#if celda.visible}
+                                {celda.value}
+                            {/if}
+                        </button>
+                    {:else}
+                        <div class="h-[12.5vh] w-full flex items-center justify-center {celda.color} {celda.border}" style="font-size: 350%">
+                            {#if celda.visible}
+                                {celda.value}
+                            {/if}
+                        </div>
                     {/if}
-                {/each}
+                {/if}
+            {/each}
+        </div>
+    {/each}
+</div>
+<p class="text-dele-primary text-center w-screen text-3xl" id="pista"></p>
+
+<div>
+    {#if !phrase_checked}
+        <form class="w-1/2 m-auto grid grid-cols-2 place-items-center">
+            <label class="grid grid-cols-1 mt-4 w-11/12">
+                <span class="w-full text-dele-primary text-center text-2xl">Nueva Frase</span>
+                <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="fraseInput" placeholder="Frase..." />
+            </label>
+            <label class="grid grid-cols-1 mt-4 w-11/12">
+                <span class="w-full text-dele-primary text-center text-2xl">Nueva Pista</span>
+                <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="pistaInput" placeholder="Pista..." />
+            </label>
+        </form>
+        <div class="grid grid-cols-1 place-items-center w-1/2 m-auto">
+            <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl w-1/2 mt-4 text-xl text-white" on:click={() => check_phrase(document.getElementById("fraseInput"), document.getElementById("pistaInput"))}>Comprobar</button>
+        </div>
+    {:else}
+        {#if main_menu}
+            <div class="grid grid-cols-3 place-items-center mt-8">
+                <button class="w-1/2 rounded-2xl bg-dele-primary hover:bg-dele-accent text-white text-2xl px-2 py-1" on:click={() => {ruleta.update(() => true); say_letter = true; main_menu = false;}}>Decir Letra</button>
+                <button class="w-1/2 rounded-2xl bg-dele-primary hover:bg-dele-accent text-white text-2xl px-2 py-1" on:click={() => {buy_vocal = true; main_menu = false;}}>Comprar Vocal</button>
+                <button class="w-1/2 rounded-2xl bg-dele-primary hover:bg-dele-accent text-white text-2xl px-2 py-1" on:click={() => {say_phrase = true; main_menu = false;}}>Resolver</button>
             </div>
-        {/each}
-    </div>
-    <p class="text-dele-primary text-center w-screen text-3xl" id="pista"></p>
-    
-    <div>
-        {#if !phrase_checked}
-            <form class="w-1/2 m-auto grid grid-cols-2 place-items-center">
-                <label class="grid grid-cols-1 mt-4 w-11/12">
-                    <span class="w-full text-dele-primary text-center text-2xl">Nueva Frase</span>
-                    <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="fraseInput" placeholder="Frase..." />
-                </label>
-                <label class="grid grid-cols-1 mt-4 w-11/12">
-                    <span class="w-full text-dele-primary text-center text-2xl">Nueva Pista</span>
-                    <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="pistaInput" placeholder="Pista..." />
-                </label>
-            </form>
-            <div class="grid grid-cols-1 place-items-center w-1/2 m-auto">
-                <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl w-1/2 mt-4 text-xl text-white" on:click={() => check_phrase(document.getElementById("fraseInput"), document.getElementById("pistaInput"))}>Comprobar</button>
-            </div>
-        {:else}
-            {#if main_menu}
-                <div class="grid grid-cols-3 place-items-center mt-8">
-                    <button class="w-1/2 rounded-2xl bg-dele-primary hover:bg-dele-accent text-white text-2xl px-2 py-1" on:click={() => {ruleta.update(() => true); say_letter = true; main_menu = false;}}>Decir Letra</button>
-                    <button class="w-1/2 rounded-2xl bg-dele-primary hover:bg-dele-accent text-white text-2xl px-2 py-1" on:click={() => {buy_vocal = true; main_menu = false;}}>Comprar Vocal</button>
-                    <button class="w-1/2 rounded-2xl bg-dele-primary hover:bg-dele-accent text-white text-2xl px-2 py-1" on:click={() => {say_phrase = true; main_menu = false;}}>Resolver</button>
-                </div>
-            {/if}
-            {#if say_letter}
-                <form class="w-1/3 m-auto">
-                    <label class="grid grid-cols-1 mt-2">
-                        <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="letraInput" placeholder="Consonante..." />
-                    </label>
-                    <div class="grid grid-cols-2     mt-2 place-items-center">
-                        <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {say_letter = false; main_menu = true;}}>Volver</button>
-                        <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl text-xl text-white w-5/6" on:click={() => check_consonante(document.getElementById("letraInput"))}>Comprobar</button>
-                    </div>
-                </form>
-            {/if}
-            {#if buy_vocal}
-                <form class="w-1/3 m-auto">
-                    <label class="grid grid-cols-1 mt-2">
-                        <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="letraInput" placeholder="Vocal..." />
-                    </label>
-                    <div class="grid grid-cols-2 mt-2 place-items-center">
-                        <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {buy_vocal = false; main_menu = true;}}>Volver</button>
-                        <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl text-xl text-white w-5/6" on:click={() => check_vocal(document.getElementById("letraInput"))}>Comprobar</button>
-                    </div>
-                </form>
-            {/if}
-            {#if say_phrase}
-                <form class="w-1/3 m-auto">
-                    <label class="grid grid-cols-1 mt-2">
-                        <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="resolucionInput" placeholder="Frase..." />
-                    </label>
-                    <div class="grid grid-cols-2 mt-2 place-items-center">
-                        <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {say_phrase = false; main_menu = true;}}>Volver</button>
-                        <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl text-xl text-white w-5/6" on:click={() => check_resolution(document.getElementById("resolucionInput"))}>Comprobar</button>
-                    </div>
-                </form>
-            {/if}
         {/if}
+        {#if say_letter}
+            <form class="w-1/3 m-auto">
+                <label class="grid grid-cols-1 mt-2">
+                    <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="letraInput" placeholder="Consonante..." />
+                </label>
+                <div class="grid grid-cols-2     mt-2 place-items-center">
+                    <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl text-xl text-white w-5/6" on:click={() => check_consonante(document.getElementById("letraInput"))}>Comprobar</button>
+                    <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {say_letter = false; main_menu = true;}}>Volver</button>
+                </div>
+            </form>
+        {/if}
+        {#if buy_vocal}
+            <form class="w-1/3 m-auto">
+                <label class="grid grid-cols-1 mt-2">
+                    <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="letraInput" placeholder="Vocal..." />
+                </label>
+                <div class="grid grid-cols-2 mt-2 place-items-center">
+                    <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl text-xl text-white w-5/6" on:click={() => check_vocal(document.getElementById("letraInput"))}>Comprobar</button>
+                    <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {buy_vocal = false; main_menu = true;}}>Volver</button>
+                </div>
+            </form>
+        {/if}
+        {#if say_phrase}
+            <form class="w-1/3 m-auto">
+                <label class="grid grid-cols-1 mt-2">
+                    <input class="w-full text-lg border-gray-500 p-1 rounded-2xl border-2" type="text" id="resolucionInput" placeholder="Frase..." />
+                </label>
+                <div class="grid grid-cols-2 mt-2 place-items-center">
+                    <button class="py-1 px-2 bg-dele-primary hover:bg-dele-accent rounded-2xl text-xl text-white w-5/6" on:click={() => check_resolution(document.getElementById("resolucionInput"))}>Comprobar</button>
+                    <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {say_phrase = false; main_menu = true;}}>Volver</button>
+                </div>
+            </form>
+        {/if}
+    {/if}
+</div>
+
+{#if success_loading_phrase}
+    <div class="fixed top-0 right-0 m-5">
+        <Card class="bg-green-600 text-white grid-cols-1 text-center px-6 py-2">
+            <p class="p-2">La frase es válida</p>
+        </Card>
     </div>
-    
-    {#if success_loading_phrase}
-        <div class="fixed top-0 right-0 m-5">
-            <Card class="bg-green-600 text-white grid-cols-1 text-center px-6 py-2">
-                <p class="p-2">La frase es válida</p>
-            </Card>
-        </div>
-    {:else if unsuccess_loading_phrase}
-        <div class="fixed top-0 right-0 m-5">
-            <Card class="bg-red-500 text-white grid grid-cols-1 text-center px-6 py-2">
-                <p class="p-2">{error_loading_phrase}</p>
-            </Card>
-        </div>
-    {/if}
-    
-    {#if success_letter}
-        <div class="fixed top-0 right-0 m-5">
-            <Card class="bg-green-600 text-white grid-cols-1 text-center px-6 py-2">
-                <p class="p-2">La letra está en el panel!</p>
-            </Card>
-        </div>
-    {:else if unsuccess_letter}
-        <div class="fixed top-0 right-0 m-5">
-            <Card class="bg-red-500 text-white grid grid-cols-1 text-center px-6 py-2">
-                <p class="p-2">{error_letter}</p>
-            </Card>
-        </div>
-    {/if}
-    
-    {#if success_checking_phrase}
-        <div class="fixed top-0 right-0 m-5">
-            <Card class="bg-green-600 text-white grid-cols-1 text-center px-6 py-2">
-                <p class="p-2">La frase es correcta!</p>
-            </Card>
-        </div>
-    {:else if unsuccess_checking_phrase}
-        <div class="fixed top-0 right-0 m-5">
-            <Card class="bg-red-500 text-white grid grid-cols-1 text-center px-6 py-2">
-                <p class="p-2">La frase no es correcta</p>
-            </Card>
-        </div>
-    {/if}
+{:else if unsuccess_loading_phrase}
+    <div class="fixed top-0 right-0 m-5">
+        <Card class="bg-red-500 text-white grid grid-cols-1 text-center px-6 py-2">
+            <p class="p-2">{error_loading_phrase}</p>
+        </Card>
+    </div>
+{/if}
+
+{#if success_letter}
+    <div class="fixed top-0 right-0 m-5">
+        <Card class="bg-green-600 text-white grid-cols-1 text-center px-6 py-2">
+            <p class="p-2">La letra está en el panel!</p>
+        </Card>
+    </div>
+{:else if unsuccess_letter}
+    <div class="fixed top-0 right-0 m-5">
+        <Card class="bg-red-500 text-white grid grid-cols-1 text-center px-6 py-2">
+            <p class="p-2">{error_letter}</p>
+        </Card>
+    </div>
+{/if}
+
+{#if success_checking_phrase}
+    <div class="fixed top-0 right-0 m-5">
+        <Card class="bg-green-600 text-white grid-cols-1 text-center px-6 py-2">
+            <p class="p-2">La frase es correcta!</p>
+        </Card>
+    </div>
+{:else if unsuccess_checking_phrase}
+    <div class="fixed top-0 right-0 m-5">
+        <Card class="bg-red-500 text-white grid grid-cols-1 text-center px-6 py-2">
+            <p class="p-2">La frase no es correcta</p>
+        </Card>
+    </div>
+{/if}
 
 <audio bind:this={audioElement}>
-    <source src="./src/puzzle_solved.mp3" type="audio/mpeg">
+    <source src="/src/puzzle_solved.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
 </audio>

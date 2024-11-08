@@ -28,6 +28,7 @@
     let isSpinning = false; // Estado de giro
 
     let audioElement;
+    let button_salir = true;
 
     export const reinicioRuleta = () => {
       spinDeg = 0;
@@ -37,6 +38,7 @@
     const spinWheel = () => {
       if (isSpinning) return;
 
+      button_salir = false;
       audioElement.currentTime = 5.2;
       audioElement.play();
       isSpinning = true;
@@ -51,6 +53,7 @@
 
       setTimeout(() => {
         isSpinning = false;
+        button_salir = true;
       }, 5000)
     };
     
@@ -124,7 +127,9 @@
 
 
 <div class="m-auto grid grid-cols-1 place-items-center min-h-screen">
-    <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {volverRuleta()}}>Volver</button>
+    {#if button_salir}
+        <button class="py-1 px-2 bg-red-500 rounded-2xl w-auto text-xl text-center text-white w-5/6" on:click={() => {volverRuleta()}}>Volver</button>
+    {/if}
     <div class="ruleta-container w-auto h-auto">
         <div class="pointer text-dele-primary">▲</div>
         <div on:click={spinWheel} id="ruleta" style="transform: rotate({spinDeg}deg); transition: transform 3s;"></div>
@@ -132,7 +137,7 @@
 </div>
 
 <audio bind:this={audioElement}>
-    <source src="./src/sonido_ruleta.mp3" type="audio/mpeg">
+    <source src="/src/sonido_ruleta.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
 </audio>
 
