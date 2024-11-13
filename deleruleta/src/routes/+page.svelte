@@ -56,11 +56,11 @@
     {/if}
 {:else}
     <div class="bg-cover bg-center h-screen w-screen" style="background-image: url(/src/portada.jpg)">
-        <h1 class="text-7xl absolute top-10 left-[8%] text-black animate-bounce" style="-webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: black;">La DeleRuleta</h1>
+        <h1 class="text-7xl absolute top-10 left-[8%] text-white animate-bounce" style="-webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;">La DeleRuleta</h1>
   
-        <h1 class="text-7xl absolute top-10 right-[12%] text-black animate-bounce" style="-webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: black;"> de la Suerte</h1>
+        <h1 class="text-7xl absolute top-10 right-[12%] text-white animate-bounce" style="-webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;"> de la Suerte</h1>
         <button on:click={game_iniciated = true} class="rounded-2xl text-5xl px-2 py-1 bg-dele-primary hover:bg-dele-accent absolute left-[38%] top-1/2 text-white">Iniciar Juego!</button>
     </div>
 {/if}
