@@ -3,10 +3,18 @@ from html2image import Html2Image
 import os
 
 def gen_acreditacion(data, f_output):
-    hti = Html2Image(output_path=f_output)
+    # Initialize Html2Image with custom browser if specified
+    browser_exec = os.environ.get('HTML2IMAGE_BROWSER')
+    if browser_exec:
+        hti = Html2Image(output_path=f_output, browser_executable=browser_exec)
+    else:
+        hti = Html2Image(output_path=f_output)
     with open('base.html', 'r') as file:
         html = file.read()
 
+    if not data or data.get("centro") is None:
+        print("Skipping empty/invalid row:", data)
+        return
 
     # format the file with the corresponding data
     if "escuela" in data["centro"].lower():
@@ -24,6 +32,9 @@ def gen_acreditacion(data, f_output):
     elif "postgrado" in data["centro"].lower():
         data["color"] = "#FF6D2E"
         data["centro"] = "puerta"
+    elif "salud" in data["centro"].lower():
+        data["color"] = "#ED2939"
+        data["centro"] = "salud"
     elif data["centro"] == "SECTORIAL" or data["centro"] == "AUTORIDAD":
         data["color"] = "#1A2A84"
 
