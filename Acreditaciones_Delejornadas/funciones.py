@@ -6,6 +6,8 @@ def gen_acreditacion(data, f_output):
     hti = Html2Image(output_path=f_output)
     with open('base.html', 'r') as file:
         html = file.read()
+    
+    print(data)
 
 
     # format the file with the corresponding data
@@ -31,8 +33,8 @@ def gen_acreditacion(data, f_output):
     if data["rol"] == "ORGANIZADOR":
         data["rol"] = """
                         <div style="width: 1031px; height: 176px; left: 380px; top: 710px; position: absolute">
-                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: #001489"></div>
-                        <div style="width: 835px; height: 94px; left: 83px; top: 48px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">ORGANIZACIÓN</div>
+                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: #1e4a90"></div>
+                        <div style="width: 835px; height: 94px; left: 98px; top: 41px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">ORGANIZACIÓN</div>
                         </div>
                         """
     # Ponentes
@@ -40,16 +42,28 @@ def gen_acreditacion(data, f_output):
         data["rol"] = """
                         <div style="width: 1031px; height: 176px; left: 380px; top: 710px; position: absolute">
                         <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: rgba(0, 20, 137, 0.70)"></div>
-                        <div style="width: 835px; height: 94px; left: 83px; top: 48px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">PONENTE</div>
+                        <div style="width: 835px; height: 94px; left: 98px; top: 41px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">PONENTE</div>
                         </div>
                         """
     elif data["rol"] != "NO":
         data["rol"] = f"""
                         <div style="width: 1031px; height: 176px; left: 380px; top: 710px; position: absolute">
-                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: rgba(0, 20, 137, 0.70)"></div>
-                        <div style="width: 835px; height: 94px; left: 83px; top: 48px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">{data["rol"]}</div>
+                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: #3BC4A0"></div>
+                        <div style="width: 835px; height: 94px; left: 98px; top: 41px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">{data["rol"]}</div>
                         </div>
                         """
+        
+
+    if data["name"] == "🎀 Nadia 🎀":
+        print("aaaaaaaa")
+        data["color"] = "#F283AB"
+        data["rol"] = """
+                        <div style="width: 1031px; height: 176px; left: 380px; top: 710px; position: absolute">
+                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: #F283AB"></div>
+                        <div style="width: 835px; height: 94px; left: 98px; top: 41px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">ORGANIZACIÓN </div>
+                        </div>
+                        """
+
     
     # Sectoriales
     elif data["centro"] == "SECTORIAL":
@@ -78,7 +92,10 @@ def gen_acreditacion(data, f_output):
     file_name = f"acred_{data['name']}_{data['surname']}.png"
 
     # Construye la ruta completa para las imágenes
-    ruta_imagen = os.path.join(os.getcwd(), "base", "eps-logo.png")
+    ruta_imagen = os.path.join(os.getcwd(), "base", "dele.png")
+    if data["name"].replace("_", " ") == "🎀 Nadia 🎀":
+        ruta_imagen = os.path.join(os.getcwd(), "base", "nadia_kitty.svg")
+
     ruta_centro_imagen = os.path.join(os.getcwd(), "base", f'{data["centro"]}.png')
     ruta_uc3m_imagen = os.path.join(os.getcwd(), "base", "uc3m.png")
     # Reemplaza las rutas relativas en el HTML con las rutas absolutas
