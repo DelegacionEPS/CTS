@@ -1,6 +1,7 @@
 import openpyxl as xl
 from html2image import Html2Image
 import os
+from PIL import Image
 
 def gen_acreditacion(data, f_output):
     # Initialize Html2Image with custom browser if specified
@@ -11,8 +12,6 @@ def gen_acreditacion(data, f_output):
         hti = Html2Image(output_path=f_output)
     with open('base.html', 'r') as file:
         html = file.read()
-    
-    print(data)
 
     if not data or data.get("centro") is None:
         print("Skipping empty/invalid row:", data)
@@ -38,13 +37,13 @@ def gen_acreditacion(data, f_output):
         data["color"] = "#ED2939"
         data["centro"] = "salud"
     elif data["centro"] == "SECTORIAL" or data["centro"] == "AUTORIDAD":
-        data["color"] = "#1A2A84"
+        data["color"] = "#171796"
 
 
     if data["rol"] == "ORGANIZADOR":
         data["rol"] = """
                         <div style="width: 1031px; height: 176px; left: 380px; top: 710px; position: absolute">
-                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: #1e4a90"></div>
+                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: #171796"></div>
                         <div style="width: 835px; height: 94px; left: 98px; top: 41px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">ORGANIZACIÓN</div>
                         </div>
                         """
@@ -63,17 +62,6 @@ def gen_acreditacion(data, f_output):
                         <div style="width: 835px; height: 94px; left: 98px; top: 41px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">{data["rol"]}</div>
                         </div>
                         """
-        
-
-    if data["name"] == "🎀 Nadia 🎀":
-        print("aaaaaaaa")
-        data["color"] = "#F283AB"
-        data["rol"] = """
-                        <div style="width: 1031px; height: 176px; left: 380px; top: 710px; position: absolute">
-                        <div style="width: 1031px; height: 176px; left: 0px; top: 0px; position: absolute; background: #F283AB"></div>
-                        <div style="width: 835px; height: 94px; left: 98px; top: 41px; position: absolute; text-align: center; color: white; font-size: 70px; font-family: Inter; font-weight: 800; word-wrap: break-word">ORGANIZACIÓN </div>
-                        </div>
-                        """
 
     
     # Sectoriales
@@ -82,17 +70,17 @@ def gen_acreditacion(data, f_output):
 
     # FIGURAS DE EQUIPO
     if data["team"] == "AZUL":
-        data["team"] = """<div style="width: 111px; height: 111px; right: 30px; top: 30px; position: absolute; background: #FFBC4B"></div>"""
+        data["team"] = """<div style="width: 111px; height: 111px; right: 30px; top: 30px; position: absolute; background: #4F4FFF"></div>"""
     elif data["team"] == "VERDE":
         data["team"] = """<div style="width: 111px; height: 111px; right: 70px; top: 90px; position: absolute; transform: rotate(-44.65deg); transform-origin: 0 0; background: #65CC76"></div>"""
     elif data["team"] == "ROJO":
-        data["team"] = """<div style="width: 111px; height: 111px; right: 30px; top: 30px; position: absolute; background: #C474FC; border-radius: 9999px"></div>"""
+        data["team"] = """<div style="width: 111px; height: 111px; right: 30px; top: 30px; position: absolute; background: #FF4B4B; border-radius: 9999px"></div>"""
     elif data["team"] == "AMARILLO":
         data["team"] = """<div style="width: 0; height: 0;right: 30px; top: 30px; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 100px solid #FFEB3A; position: absolute;"></div>"""
     else:
         data["team"] = "white"
     
-    data["event"] = "I JFDE - EPS"
+    data["event"] = "XVI JFDE"
 
     #data["name"] = data["name"].capitalize()
     html = html.format(**data)
@@ -104,8 +92,6 @@ def gen_acreditacion(data, f_output):
 
     # Construye la ruta completa para las imágenes
     ruta_imagen = os.path.join(os.getcwd(), "base", "dele.png")
-    if data["name"].replace("_", " ") == "🎀 Nadia 🎀":
-        ruta_imagen = os.path.join(os.getcwd(), "base", "nadia_kitty.svg")
 
     ruta_centro_imagen = os.path.join(os.getcwd(), "base", f'{data["centro"]}.png')
     ruta_uc3m_imagen = os.path.join(os.getcwd(), "base", "uc3m.png")
@@ -116,6 +102,17 @@ def gen_acreditacion(data, f_output):
 
     print(f"Generating {file_name}")
     hti.screenshot(html_str=html, save_as=file_name, size=(1411, 950))
+
+    # Crop the image to 1141x863 pixels, removing from the bottom
+    img = Image.open(os.path.join(f_output, file_name))
+    img_cropped = img.crop((0, 0, img.width, 863))
+    
+    # Create cropped directory if it doesn't exist
+    cropped_dir = os.path.join(f_output, "cropped")
+    os.makedirs(cropped_dir, exist_ok=True)
+    
+    img_cropped.save(os.path.join(cropped_dir, file_name))
+
 
 
 def get_excel_data(excel_path):

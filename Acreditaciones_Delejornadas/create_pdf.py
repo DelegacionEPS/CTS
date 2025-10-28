@@ -1,9 +1,10 @@
 import os
+import sys
+
 from PIL import Image
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
-
 
 def create_pdf_with_images(input_folder, output_pdf, images_per_page=6):
     """
@@ -95,8 +96,8 @@ def create_pdf_with_images(input_folder, output_pdf, images_per_page=6):
 
 def main():
     # Define paths
-    input_folder = "salida_output"
-    output_pdf = "acreditaciones.pdf"
+    input_folder = os.path.join(sys.argv[2], "cropped")
+    output_pdf = sys.argv[3]
     
     # Check if input folder exists
     if not os.path.exists(input_folder):
