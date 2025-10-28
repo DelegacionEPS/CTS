@@ -3,3 +3,4 @@ acreditaciones*
 acred_*
 ejemplo.xlsx
 *.pyc
+__pycache__
