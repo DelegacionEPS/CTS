@@ -1,2 +1,6 @@
-acreditaciones
+acreditaciones.pdf
 .idea
+acred_*
+ejemplo.xlsx
+*.pyc
+__pycache__
