@@ -15,7 +15,7 @@ export function useGame() {
       const w = writes.current
       fetch('/api/state')
         .then(r => r.json())
-        .then(g => w === writes.current && setGame(g))
+        .then(g => w === writes.current && setGame(g?.owner ? g : null)) // a game saved by an older version has no `owner`: treat as none
         .catch(() => {})
     }
     poll()

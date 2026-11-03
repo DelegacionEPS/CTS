@@ -5,7 +5,7 @@ import { validate, type Word, type WordSet } from './game'
 const ALPHABET = 'ABCDEFGHIJLMNÑOPQRSTUVXYZ'
 
 export const blankSet = (): WordSet => ({
-  name: 'Nuevo equipo',
+  name: 'Nuevo rosco',
   color: '#22c55e',
   words: [...ALPHABET].map(letter => ({ letter, question: '', answer: '' })),
 })
@@ -30,7 +30,7 @@ export function SetEditor({ initial, onSave, onCancel }: Props) {
     <section className="card editor" style={{ '--team': set.color } as CSSProperties}>
       <div className="row editor-head">
         <input type="color" value={set.color} onChange={e => setSet({ ...set, color: e.target.value })} aria-label="Color" />
-        <input className="name-input" value={set.name} onChange={e => setSet({ ...set, name: e.target.value })} placeholder="Nombre del equipo" />
+        <input className="name-input" value={set.name} onChange={e => setSet({ ...set, name: e.target.value })} placeholder="Nombre del rosco" />
       </div>
 
       <table className="words">

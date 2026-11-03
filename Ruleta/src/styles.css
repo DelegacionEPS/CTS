@@ -129,7 +129,7 @@ input[type='number'] {
   transition: background 0.3s, scale 0.3s;
   user-select: none;
 }
-.letter.correct { --pending: var(--correct); }
+.letter.owned { --pending: var(--owner); }
 .letter.current {
   scale: 1.25;
   z-index: 1;
@@ -171,18 +171,33 @@ input[type='number'] {
 
 /* ---------- Player ---------- */
 
-.player { padding: 1rem; gap: 0.5rem; }
-/* Columns and --size come from bestGrid() so any number of teams fits the screen. */
-.player-teams { flex: 1; display: grid; justify-content: center; align-content: center; gap: 0 1rem; }
+.player { padding: 1rem; gap: 0.5rem; height: 100vh; }
+.player-main { flex: 1; min-height: 0; display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: center; }
+.player-rosco { height: 100%; aspect-ratio: 1; max-width: 100%; }
+.player-teams { display: grid; gap: 1rem; align-content: center; }
 .player-team {
-  text-align: center;
-  opacity: 0.55;
-  scale: 0.92;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  opacity: 0.6;
   transition: opacity 0.4s, scale 0.4s;
 }
-.player-team.active { opacity: 1; scale: 1; }
-.player-team .team-name { font-size: calc(var(--size) * 0.07); margin-bottom: calc(var(--size) * 0.02); }
-.hint { margin: calc(var(--size) * 0.03) 0 0; font-size: calc(var(--size) * 0.06); font-weight: 700; color: var(--pass); }
+.player-team.active { opacity: 1; scale: 1.03; border-color: var(--team); box-shadow: 0 0 40px color-mix(in srgb, var(--team) 40%, transparent); }
+.player-team .team-name { font-size: 1.6rem; }
+.player-team .hits { font-size: 3rem; margin: 0; }
+.player-team .clock { font-size: 3rem; }
+.hint { font-size: 7cqw; font-weight: 700; color: var(--pass); }
+.hint b { display: block; font-size: 22cqw; line-height: 1; }
+
+@media (max-width: 800px) {
+  .player-main { grid-template-columns: 1fr; overflow: auto; }
+  .player-rosco { height: auto; width: 100%; }
+}
 
 /* ---------- Presenter ---------- */
 
@@ -287,10 +302,11 @@ input[type='number'] {
 .comodin-input input { width: 4.5rem; }
 .order { font-weight: 900; color: var(--team); font-size: 1.4rem; }
 .warning { display: block; color: #fbbf24; font-size: 0.85rem; margin-top: 0.25rem; }
+.admin-rosco { max-width: 420px; margin: 1rem auto; }
 .admin-teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
 .admin-team { text-align: center; }
-.admin-team .rosco { max-width: 360px; margin: 0.5rem auto; }
 .admin-team .row { justify-content: center; }
+.admin-team .clock { font-size: 2.5rem; margin: 0.25rem 0; }
 
 /* ---------- Set editor ---------- */
 

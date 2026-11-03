@@ -1,25 +1,12 @@
 import type { CSSProperties } from 'react'
 import { count, ranking, remaining, type Game } from './game'
 import { Rosco } from './Rosco'
-import { COMODINES, seconds, useGame, useNow, useViewport } from './store'
-
-/** Column count and rosco size (px) that make n roscos as big as possible on screen. */
-export function bestGrid(n: number, w: number, h: number) {
-  let best = { cols: 1, size: 0 }
-  for (let cols = 1; cols <= n; cols++) {
-    const rows = Math.ceil(n / cols)
-    // Each cell also holds the team name above and the hint below (~30% of the rosco).
-    const size = Math.min(w / cols, h / rows / 1.3) * 0.9
-    if (size > best.size) best = { cols, size }
-  }
-  return best
-}
+import { COMODINES, seconds, useGame, useNow } from './store'
 
 /** Big screen for the contestants and the audience. Read-only. */
 export function Player() {
   const [game] = useGame()
   const now = useNow()
-  const { w, h } = useViewport()
   if (!game)
     return (
       <div className="screen center-screen">
@@ -28,30 +15,34 @@ export function Player() {
       </div>
     )
 
-  const { cols, size } = bestGrid(game.teams.length, w - 32, h - 80)
+  const word = game.set.words[game.index]
+  const playing = game.phase === 'playing'
   return (
     <div className="screen player">
       <h1 className="logo small">Pasapalabra</h1>
-      <div className="player-teams" style={{ gridTemplateColumns: `repeat(${cols}, ${size}px)` }}>
-        {game.teams.map((t, i) => {
-          const active = game.phase === 'playing' && i === game.turn
-          const w = t.words[t.index]
-          const left = remaining(game, i, now)
-          return (
-            <div key={i} className={`player-team ${active ? 'active' : ''}`} style={{ '--team': t.color, '--size': `${size}px` } as CSSProperties}>
-              <h2 className="team-name">{t.name}</h2>
-              <Rosco team={t} active={active}>
+      <div className="player-main">
+        <div className="player-rosco">
+          <Rosco game={game} active={playing}>
+            {playing && <div className="hint">{word.contains ? 'Contiene la' : 'Empieza por'} <b>{word.letter}</b></div>}
+          </Rosco>
+        </div>
+        <div className="player-teams">
+          {game.teams.map((t, i) => {
+            const left = remaining(game, i, now)
+            return (
+              <div key={i} className={`player-team ${playing && i === game.turn ? 'active' : ''}`} style={{ '--team': t.color } as CSSProperties}>
+                <span className="dot" />
+                <h2 className="team-name">
+                  {t.name} <Comodines n={t.comodines} />
+                </h2>
+                <div className="hits">{count(game, i)}</div>
                 <div className={`clock ${left <= 10_000 && left > 0 ? 'hurry' : ''}`}>{seconds(left)}</div>
-                <div className="hits">{count(t, 'correct')}</div>
-                <div className="muted">aciertos</div>
-                <Comodines n={t.comodines} />
-              </Rosco>
-              <p className="hint">{active ? `${w.contains ? 'Contiene la' : 'Empieza por'} ${w.letter}` : ' '}</p>
-            </div>
-          )
-        })}
+              </div>
+            )
+          })}
+        </div>
       </div>
-      {game.phase === 'finished' && <Winner game={game} />}
+      {playing || <Winner game={game} />}
     </div>
   )
 }

@@ -9,31 +9,36 @@ Pantallas (se sincronizan cada segundo entre todos los dispositivos):
 
 | URL              | Para quién                                                              |
 | ---------------- | ----------------------------------------------------------------------- |
-| `/`              | Proyector (por defecto): los roscos de todos los equipos, tiempo y aciertos |
+| `/`              | Proyector (por defecto): el rosco compartido, tiempo y aciertos, tiempo y aciertos |
 | `/#/presentador` | Quien lee las definiciones: ve la respuesta y marca el resultado        |
-| `/#/admin`       | Crear y editar roscos, empezar partida y corregir letras o tiempo        |
+| `/#/admin`       | Crear y editar roscos, elegir equipos, empezar partida y corregir letras o tiempo        |
 
 Atajos del presentador: `Espacio` empezar/pausar · `Enter` acierto · `P` fallo/pasapalabra · `C` usar comodín (si están activados) · `Ctrl/Cmd+Z` deshacer.
 
 ## Reglas
 
-- **Acierto**: la letra se pone verde y el equipo sigue con el reloj en marcha.
-- **Fallo = Pasapalabra**: la letra sigue pendiente, se para el reloj y pasa el turno.
+Todos los equipos juegan **el mismo rosco**, por turnos.
+
+- **Acierto**: la letra se pinta del color del equipo y este sigue con el reloj en marcha.
+- **Fallo = Pasapalabra**: la letra sigue pendiente, se para el reloj y pasa el turno al siguiente equipo (que responde la siguiente letra).
+- Cada equipo tiene su propio reloj; la partida acaba cuando no quedan letras o ningún equipo tiene tiempo.
+- Gana quien más letras tenga de su color; si empatan, el que tenga más tiempo de sobra.
+- El orden de turno lo eliges al crear la partida (↑ ↓ en Admin); el que tenga más comodines empieza.
+
 Los comodines vienen desactivados: actívalos con `VITE_COMODINES=true` en `.env` y reinicia `bun dev`.
 
 - **Usar comodín** 🃏: pasapalabra *sin perder el turno* (el reloj sigue). El comodín se lo queda el siguiente equipo.
-- Cada equipo gana hasta 3 comodines en los minijuegos (se apuntan en Admin al crear la partida). Empieza el que tenga más.
-- Gana quien más aciertos tenga; si empatan, el que tenga más tiempo de sobra.
+- Cada equipo gana hasta 3 comodines en los minijuegos (se apuntan en Admin al crear la partida).
 
 ## Roscos y palabras
 
-Se editan desde **Admin** (nuevo, editar, duplicar, borrar). Cada rosco es un equipo y se guarda como
-`sets/<id>.json`, así que también puedes editar esos archivos a mano o copiarlos entre ordenadores.
-Puedes jugar con tantos equipos como quieras; la pantalla de jugadores los reparte en una cuadrícula.
+Se editan desde **Admin** (nuevo, editar, duplicar, borrar) y se guardan como `sets/<id>.json`, así que también
+puedes editar esos archivos a mano o copiarlos entre ordenadores.
+Al empezar la partida eliges **un rosco** y los **equipos** (por defecto 4, con nombre y color; añade, quita o reordena).
 
 ```json
 {
-  "name": "Equipo Verde",
+  "name": "Rosco de ejemplo",
   "color": "#22c55e",
   "words": [
     { "letter": "A", "question": "Capital de Grecia", "answer": "Atenas" },
@@ -44,7 +49,7 @@ Puedes jugar con tantos equipos como quieras; la pantalla de jugadores los repar
 
 - Las letras salen en el orden de la lista.
 - `"contains": true` → «Contiene la…» en vez de «Empieza por…».
-- Un rosco con problemas (palabras vacías, respuesta que no encaja con la letra) no se puede elegir hasta arreglarlo.
+- El color del rosco solo se usa en Admin. Un rosco con problemas (palabras vacías, respuesta que no encaja con la letra) no se puede elegir hasta arreglarlo.
 
 ## Dónde se guardan los datos
 

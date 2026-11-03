@@ -49,7 +49,7 @@ export function Presenter() {
     )
 
   const team = game.teams[game.turn]
-  const word = team.words[team.index]
+  const word = game.set.words[game.index]
   const running = game.runningSince !== null
 
   return (
@@ -61,7 +61,7 @@ export function Presenter() {
               <span className="dot" />
               <b>{t.name}</b>
               <span className="chip-time">{seconds(remaining(game, i, now))}s</span>
-              <span className="good">{count(t, 'correct')}✓</span>
+              <span className="good">{count(game, i)}✓</span>
               <Comodines n={t.comodines} />
             </div>
           )
@@ -70,7 +70,7 @@ export function Presenter() {
 
       <main className="presenter-main">
         <div className="presenter-rosco">
-          <Rosco team={team} active={game.phase === 'playing'}>
+          <Rosco game={game} active={game.phase === 'playing'}>
             <div className={`clock ${running ? '' : 'paused'}`}>{seconds(remaining(game, game.turn, now))}</div>
             <div className="muted">{running ? 'en marcha' : 'pausado'}</div>
           </Rosco>
@@ -89,7 +89,7 @@ export function Presenter() {
       </main>
 
       <footer className="controls">
-        <button className="btn ghost" onClick={toggle} disabled={game.phase === 'finished' || isDone(team)}>
+        <button className="btn ghost" onClick={toggle} disabled={game.phase === 'finished' || isDone(game, game.turn)}>
           {running ? '⏸ Pausar' : '▶ Empezar'} <kbd>Espacio</kbd>
         </button>
         <button className="btn correct" onClick={() => respond('correct')}>
