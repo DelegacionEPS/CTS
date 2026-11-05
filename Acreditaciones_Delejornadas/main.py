@@ -1,6 +1,8 @@
+import os
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
-from funciones import gen_acreditacion, get_excel_data
+from funciones import gen_acreditacion, get_excel_data, make_pdf
 
 
 def main():
@@ -12,9 +14,12 @@ def main():
         output_file = sys.argv[2]
     data = get_excel_data(input_file)
     f_output = output_file
-    for i in data:
-        print(i)
-        gen_acreditacion(i, f_output)
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = [executor.submit(gen_acreditacion, row, f_output) for row in data]
+        for row, future in zip(data, futures):
+            print(row)
+            future.result()
+    make_pdf(f_output, os.path.join(f_output, "acreditaciones.pdf"))
 
 
 if __name__ == "__main__":
