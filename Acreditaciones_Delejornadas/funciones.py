@@ -95,3 +95,26 @@ def get_excel_data(excel_path):
                      dataframe.cell(row=1, column=5).value: i[4].value, dataframe.cell(row=1, column=6).value: i[5].value})
     data.pop(0)
     return data
+
+
+def make_pdf(img_dir, pdf_path, card_cm=(10, 6.28), dpi=300):
+    """Compone los PNG de img_dir en un PDF A4, rejilla centrada con tarjetas de card_cm."""
+    from glob import glob
+    from PIL import Image
+
+    px = lambda cm: round(cm / 2.54 * dpi)
+    pw, ph = px(21), px(29.7)
+    cw, ch = px(card_cm[0]), px(card_cm[1])
+    cols, rows = pw // cw, ph // ch
+    mx, my = (pw - cols * cw) // 2, (ph - rows * ch) // 2
+
+    files = sorted(glob(os.path.join(img_dir, "acred_*.png")))
+    pages = []
+    for i, f in enumerate(files):
+        if i % (cols * rows) == 0:
+            pages.append(Image.new("RGB", (pw, ph), "white"))
+        k = i % (cols * rows)
+        card = Image.open(f).convert("RGB").resize((cw, ch))
+        pages[-1].paste(card, (mx + (k % cols) * cw, my + (k // cols) * ch))
+    if pages:
+        pages[0].save(pdf_path, save_all=True, append_images=pages[1:], resolution=dpi)

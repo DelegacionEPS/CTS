@@ -14,7 +14,7 @@ def main():
         output_file = sys.argv[2]
     data = get_excel_data(input_file)
     f_output = output_file
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=8) as executor:
         futures = [executor.submit(gen_acreditacion, row, f_output) for row in data]
         for row, future in zip(data, futures):
             print(row)
