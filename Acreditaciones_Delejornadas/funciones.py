@@ -3,7 +3,10 @@ from html2image import Html2Image
 import os
 
 def gen_acreditacion(data, f_output):
-    hti = Html2Image(output_path=f_output)
+    hti = Html2Image(
+        output_path=f_output,
+        custom_flags=['--log-level=3']
+    )
     with open('base.html', 'r') as file:
         html = file.read()
 
@@ -26,6 +29,9 @@ def gen_acreditacion(data, f_output):
         data["centro"] = "puerta"
     elif data["centro"] == "SECTORIAL" or data["centro"] == "AUTORIDAD":
         data["color"] = "#1A2A84"
+    elif "salud" in data["centro"].lower():
+        data["color"] = "#FF0707"
+        data["centro"] = "salud"
 
     if data["rol"] == "ORGANIZADOR":
         data["rol"] = """
