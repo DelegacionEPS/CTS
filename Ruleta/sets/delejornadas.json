@@ -1,0 +1,146 @@
+{
+  "name": "Delejornadas",
+  "color": "#8b5cf6",
+  "words": [
+    {
+      "letter": "A",
+      "question": "Órgano de supervisión y control de la Delegación en el ámbito del centro, constituido por los delegados y subdelegados de grupo.",
+      "answer": "Asamblea"
+    },
+    {
+      "letter": "B",
+      "question": "Ayuda económica oficial que reciben los estudiantes para financiar sus estudios, tasas de matrícula o estancias de movilidad.",
+      "answer": "Beca"
+    },
+    {
+      "letter": "C",
+      "question": "Órgano de representación ordinario y de coordinación de las actividades de la Delegación General entre las distintas delegaciones de centro.",
+      "answer": "Consejo"
+    },
+    {
+      "letter": "D",
+      "question": "Órgano de gobierno que dirige, coordina y administra una facultad específica dentro de la Universidad.",
+      "answer": "Decanato"
+    },
+    {
+      "letter": "E",
+      "question": "Conjunto de ordenanzas que reglan el gobierno de un cuerpo como la Universidad o la Delegación de Estudiantes.",
+      "answer": "Estatutos"
+    },
+    {
+      "letter": "F",
+      "question": "División académica de la Universidad en la que se agrupan estudios de un campo en concreto.",
+      "answer": "Facultad"
+    },
+    {
+      "letter": "G",
+      "question": "Persona responsable de la gestión de los servicios administrativos y económicos de la Universidad.",
+      "answer": "Gerente"
+    },
+    {
+      "letter": "H",
+      "question": "Dicho del formato de reunión en que los convocados tienen la posibilidad de asistir presencial o telemáticamente.",
+      "answer": "Híbrido"
+    },
+    {
+      "letter": "I",
+      "question": "Solicitud escrita dirigida a un órgano universitario (como el Decanato o Rectorado) para tramitar una petición formal.",
+      "answer": "Instancia"
+    },
+    {
+      "letter": "J",
+      "contains": true,
+      "question": "Sesión de formación del equipo de Delegación, que se celebra hoy en Colmenarejo.",
+      "answer": "Delejornadas"
+    },
+    {
+      "letter": "K",
+      "contains": true,
+      "question": "Anglicismo que alude a una clasificación o tabla ordenada en la que la UC3M suele destacar a nivel nacional e internacional, midiendo la excelencia de sus grados, su empleabilidad y su investigación.",
+      "answer": "Ranking"
+    },
+    {
+      "letter": "L",
+      "question": "Capacidad y competencia de guiar, motivar y coordinar a los representantes y estudiantes para lograr mejoras en la comunidad universitaria.",
+      "answer": "Liderazgo"
+    },
+    {
+      "letter": "M",
+      "question": "Recibe el mismo nombre que un color y se refiere a lo que nos toca comernos como mediadores entre profesorado y estudiantes.",
+      "answer": "Marrón"
+    },
+    {
+      "letter": "N",
+      "question": "Conjunto de reglamentos, estatutos y normas internas de la UC3M que la Delegación de Estudiantes debe conocer y dominar para asesorar y defender al alumnado; la más importante es la de evaluación continua.",
+      "answer": "Normativa"
+    },
+    {
+      "letter": "Ñ",
+      "contains": true,
+      "question": "Valor fundamental dentro del equipo de la Delegación de Estudiantes que implica trabajar en armonía, apoyarse mutuamente ante la carga de trabajo y defender juntos los intereses de las aulas.",
+      "answer": "Compañerismo"
+    },
+    {
+      "letter": "O",
+      "question": "Determinación de lo que en el día deba ser objeto de las discusiones o tareas de una asamblea o corporación.",
+      "answer": "Orden del día"
+    },
+    {
+      "letter": "P",
+      "question": "Documento o conjunto de procedimientos que regulan cómo actuar ante situaciones graves (como frente a revisiones de exámenes o incidencias con profesores) y que los delegados deben activar para proteger al alumnado.",
+      "answer": "Protocolo"
+    },
+    {
+      "letter": "Q",
+      "question": "Número de delegados asistentes necesarios para poder ser constituido válidamente un consejo o asamblea.",
+      "answer": "Quorum"
+    },
+    {
+      "letter": "R",
+      "question": "Máxima autoridad académica y de gobierno de la Universidad.",
+      "answer": "Rector"
+    },
+    {
+      "letter": "S",
+      "question": "Persona encargada de las labores administrativas de la Delegación, como levantar actas, dar fe de los acuerdos y custodiar los documentos de esa entidad.",
+      "answer": "Secretario"
+    },
+    {
+      "letter": "T",
+      "question": "Persona responsable de las labores presupuestarias de la Delegación, como controlar, verificar e informar sobre los ingresos y gastos.",
+      "answer": "Tesorería"
+    },
+    {
+      "letter": "U",
+      "question": "Consenso logrado por todos los miembros de un órgano en cierto asunto, sin que exista ninguna discrepancia, objeción o voto en contra.",
+      "answer": "Unanimidad"
+    },
+    {
+      "letter": "V",
+      "question": "Órgano de gobierno que coordina y supervisa un área específica de la actividad universitaria, como los Campus Saludables, la Calidad de Grado e Internacionalización.",
+      "answer": "Vicerrectorado"
+    },
+    {
+      "letter": "W",
+      "question": "Anglicismo que se traduce como taller práctico o seminario formativo, como puede ser uno sobre oratoria, resolución de conflictos o liderazgo.",
+      "answer": "Workshop"
+    },
+    {
+      "letter": "X",
+      "contains": true,
+      "question": "Valor y principio institucional que define el nivel de exigencia y calidad que busca la UC3M tanto en su docencia como en su investigación.",
+      "answer": "Excelencia"
+    },
+    {
+      "letter": "Y",
+      "question": "Alianza europea de diez universidades, de la cual la Carlos es parte, cuyo objetivo se define como la construcción de «una auténtica universidad europea centrada en el estudiante, abierta, no elitista e inclusiva».",
+      "answer": "YUFE"
+    },
+    {
+      "letter": "Z",
+      "contains": true,
+      "question": "Estructura, orden y coordinación que debe mantener el equipo de la Delegación de Estudiantes en sus comisiones, tareas y eventos para que el trabajo sea eficiente y no se sature a los representantes.",
+      "answer": "Organización"
+    }
+  ]
+}
